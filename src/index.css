@@ -1,243 +1,372 @@
+@import '@radix-ui/colors/black-alpha.css';
+@import '@radix-ui/colors/mauve.css';
+@import '@radix-ui/colors/mauve-dark.css';
+@import '@radix-ui/colors/violet.css';
+@import '@radix-ui/colors/violet-dark.css';
+@import '@radix-ui/colors/green.css';
+@import '@radix-ui/colors/green-dark.css';
+
 :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-  font-size: 16px;
+    --background: var(--mauve-1);
+    --surface: var(--mauve-2);
+    --surface-hover: var(--mauve-3);
+    --text-primary: var(--mauve-12);
+    --text-secondary: var(--mauve-11);
+    --accent: var(--violet-9);
+    --accent-hover: var(--violet-10);
+    --border: var(--mauve-6);
+    --danger: #ff6b6b;
+
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+
+    color-scheme: light dark;
+    color: var(--text-primary);
+    background-color: var(--background);
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.dark {
+    /* Radix handles variable remapping for .dark automatically if using the imported dark css files usually, 
+       but let's verify if manual mapping is needed. 
+       Standard Radix Colors v3 often targets .dark class. 
+       If so, --mauve-1 will point to the dark value inside .dark container.
+       So our semantic variables above (which rely on --mauve-1) should just work if they are inside .dark scope.
+    */
+    color-scheme: dark;
 }
 
 body {
-  margin: 0;
-  display: grid;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-  position: relative;
+    margin: 0;
+    display: flex;
+    place-items: center;
+    min-width: 320px;
+    min-height: 100vh;
 }
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  opacity: 0.05;
-  /* background: url("./logo.svg"); */
-  background-size: 256px;
-  transform: rotate(-12deg) scale(1.35);
-  animation: slide 30s linear infinite;
-  pointer-events: none;
+#root {
+    width: 100%;
+    height: 100vh;
 }
 
-@keyframes slide {
-  from {
-    background-position: 0 0;
-  }
-
-  to {
-    background-position: 256px 224px;
-  }
+button {
+    border-radius: 4px;
+    border: 1px solid transparent;
+    padding: 0.6em 1.2em;
+    font-size: 1em;
+    font-weight: 500;
+    font-family: inherit;
+    background-color: var(--surface);
+    cursor: pointer;
+    transition: border-color 0.25s, background-color 0.25s;
+    color: var(--text-primary);
 }
 
-.app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-  position: relative;
-  z-index: 1;
+button:hover {
+    background-color: var(--surface-hover);
+    border-color: var(--border);
 }
 
-.logo-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
-  margin-bottom: 2rem;
+button:focus,
+button:focus-visible {
+    outline: 2px solid var(--accent);
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 0.3s;
+input {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    padding: 8px 12px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+input:focus {
+    outline: 2px solid var(--accent);
+    border-color: var(--accent);
 }
 
-.bun-logo {
-  transform: scale(1.2);
+/* Utilities */
+.flex {
+    display: flex;
 }
 
-.bun-logo:hover {
-  filter: drop-shadow(0 0 2em #fbf0dfaa);
+.flex-col {
+    flex-direction: column;
 }
 
-.react-logo {
-  animation: spin 20s linear infinite;
+.items-center {
+    align-items: center;
 }
 
-.react-logo:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.justify-between {
+    justify-content: space-between;
 }
 
-@keyframes spin {
-  from {
-    transform: rotate(0);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
+.gap-2 {
+    gap: 0.5rem;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.gap-4 {
+    gap: 1rem;
 }
 
-code {
-  background-color: #1a1a1a;
-  padding: 0.2em 0.4em;
-  border-radius: 0.3em;
-  font-family: monospace;
+.p-4 {
+    padding: 1rem;
 }
 
-.api-tester {
-  margin: 2rem auto 0;
-  width: 100%;
-  max-width: 600px;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+.w-full {
+    width: 100%;
 }
 
-.endpoint-row {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: #1a1a1a;
-  padding: 0.75rem;
-  border-radius: 12px;
-  font: monospace;
-  border: 2px solid #fbf0df;
-  transition: 0.3s;
-  width: 100%;
-  box-sizing: border-box;
+.h-full {
+    height: 100%;
 }
 
-.endpoint-row:focus-within {
-  border-color: #f3d5a3;
+.text-sm {
+    font-size: 0.875rem;
 }
 
-.method {
-  background: #fbf0df;
-  color: #1a1a1a;
-  padding: 0.3rem 0.7rem;
-  border-radius: 8px;
-  font-weight: 700;
-  font-size: 0.9em;
-  appearance: none;
-  margin: 0;
-  width: min-content;
-  display: block;
-  flex-shrink: 0;
-  border: none;
+.text-xs {
+    font-size: 0.75rem;
 }
 
-.method option {
-  text-align: left;
+.font-bold {
+    font-weight: 700;
 }
 
-.url-input {
-  width: 100%;
-  flex: 1;
-  background: 0;
-  border: 0;
-  color: #fbf0df;
-  font: 1em monospace;
-  padding: 0.2rem;
-  outline: 0;
+.text-secondary {
+    color: var(--text-secondary);
 }
 
-.url-input:focus {
-  color: #fff;
+.text-primary {
+    color: var(--text-primary);
 }
 
-.url-input::placeholder {
-  color: rgba(251, 240, 223, 0.4);
+.bg-background {
+    background-color: var(--background);
 }
 
-.send-button {
-  background: #fbf0df;
-  color: #1a1a1a;
-  border: 0;
-  padding: 0.4rem 1.2rem;
-  border-radius: 8px;
-  font-weight: 700;
-  transition: 0.1s;
-  cursor: var(--bun-cursor);
+/* Positioning */
+.relative {
+    position: relative;
 }
 
-.send-button:hover {
-  background: #f3d5a3;
-  transform: translateY(-1px);
-  cursor: pointer;
+.absolute {
+    position: absolute;
 }
 
-.response-area {
-  width: 100%;
-  min-height: 120px;
-  background: #1a1a1a;
-  border: 2px solid #fbf0df;
-  border-radius: 12px;
-  padding: 0.75rem;
-  color: #fbf0df;
-  font: monospace;
-  resize: vertical;
-  box-sizing: border-box;
+.top-0 {
+    top: 0;
 }
 
-.response-area:focus {
-  border-color: #f3d5a3;
+.left-0 {
+    left: 0;
 }
 
-.response-area::placeholder {
-  color: rgba(251, 240, 223, 0.4);
+.right-0 {
+    right: 0;
 }
 
-@media (prefers-reduced-motion) {
-
-  *,
-  ::before,
-  ::after {
-    animation: none !important;
-  }
+.bottom-0 {
+    bottom: 0;
 }
 
-#controls-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+.left-2 {
+    left: 0.5rem;
 }
 
-.control-row>.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 0.5rem;
+.top-2 {
+    top: 0.5rem;
 }
 
-.control-row>.header>label {
-  font-weight: bold;
-  text-align: left;
+.top-1\/2 {
+    top: 50%;
 }
 
-.control-row>.field>* {
-  margin-top: .66rem;
-  width: 100%;
+.-translate-y-1\/2 {
+    transform: translateY(-50%);
+}
+
+/* Sizing */
+.w-4 {
+    width: 1rem;
+}
+
+.h-4 {
+    height: 1rem;
+}
+
+.w-8 {
+    width: 2rem;
+}
+
+.h-8 {
+    height: 2rem;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.h-full {
+    height: 100%;
+}
+
+/* Spacing */
+.pl-8 {
+    padding-left: 2rem;
+}
+
+.p-2 {
+    padding: 0.5rem;
+}
+
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.my-2 {
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.box-border {
+    box-sizing: border-box;
+}
+
+/* Radix & Custom Components */
+.sidebar {
+    width: 300px;
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+}
+
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 20px;
+    background: var(--background);
+}
+
+.card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+}
+
+/* ScrollArea */
+.ScrollAreaRoot {
+    width: 100%;
+    height: 100%;
+    border-radius: 4px;
+    overflow: hidden;
+    background: var(--surface);
+}
+
+.ScrollAreaViewport {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+}
+
+.ScrollAreaScrollbar {
+    display: flex;
+    /* ensures no selection */
+    user-select: none;
+    /* disable browser handling of all panning and zooming gestures on touch devices */
+    touch-action: none;
+    padding: 2px;
+    background: var(--black-a6);
+    transition: background 160ms ease-out;
+}
+
+.ScrollAreaScrollbar:hover {
+    background: var(--black-a8);
+}
+
+.ScrollAreaScrollbar[data-orientation='vertical'] {
+    width: 10px;
+}
+
+.ScrollAreaScrollbar[data-orientation='horizontal'] {
+    flex-direction: column;
+    height: 10px;
+}
+
+.ScrollAreaThumb {
+    flex: 1;
+    background: var(--mauve-10);
+    border-radius: 10px;
+    position: relative;
+}
+
+.ScrollAreaThumb::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    min-width: 44px;
+    min-height: 44px;
+}
+
+/* Slider */
+.SliderRoot {
+    position: relative;
+    display: flex;
+    align-items: center;
+    user-select: none;
+    touch-action: none;
+    width: 100%;
+    height: 20px;
+}
+
+.SliderTrack {
+    background-color: var(--black-a10);
+    position: relative;
+    flex-grow: 1;
+    border-radius: 9999px;
+    height: 3px;
+}
+
+.SliderRange {
+    position: absolute;
+    background-color: var(--accent);
+    border-radius: 9999px;
+    height: 100%;
+}
+
+.SliderThumb {
+    display: block;
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    box-shadow: 0 2px 10px var(--black-a7);
+    border-radius: 10px;
+}
+
+.SliderThumb:hover {
+    background-color: var(--violet-3);
+}
+
+.SliderThumb:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px var(--black-a8);
 }

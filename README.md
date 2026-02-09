@@ -1,23 +1,43 @@
-# bun-react-template
+# BLE SVS Infinite Presets
 
-To install dependencies:
+> **🚧 WORK IN PROGRESS (WIP) 🚧**
+> 
+> This project is currently under active development. Features and UI are subject to change.
+
+An Electron application for managing SVS presets with advanced fallback logic and valid/loadable templates.
+
+## Features
+
+- **Now Playing Integration**: Automatically detects current track/artist/release.
+- **Smart Presets**: Saves and loads presets based on Track, Artist, or Release.
+- **Target Fallback**: Set a specific template as a fallback if no specific preset is found.
+- **Dark Mode**: Fully thematic UI respecting system preferences.
+- **Sidebar Management**: Load, save, and manage templates directly from the sidebar.
+
+## Getting Started
+
+### Prerequisites
+
+- [Bun](https://bun.sh) (v1.0+)
+
+### Installation
 
 ```bash
 bun install
 ```
 
-To start a development server:
+### Development
+
+Run the Electron app in development mode:
 
 ```bash
-bun dev
+bun run electron:dev
 ```
 
-To run for production:
+### Building
+
+Build the application for production:
 
 ```bash
-bun start
+bun run electron:build
 ```
-
-This project was created using `bun init` in bun v1.3.5. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
-# ble-svs-infinite-presets-app
-# ble-svs-infinite-presets-app

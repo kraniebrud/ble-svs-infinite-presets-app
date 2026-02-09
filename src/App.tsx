@@ -9,7 +9,6 @@ import { useEffect, useState } from "react";
 import Connect from "./components/Connect";
 import Controls from "./components/Controls";
 import NowPlaying from "./components/NowPlaying";
-import PresetManager from "./components/PresetManager";
 import LoadablePresetManager from "./components/LoadablePresetManager";
 
 import { useNowPlaying } from "./hooks/useNowPlaying";
@@ -24,17 +23,19 @@ export const App = () => {
   const [volume, setVolume] = useState<number>(home.controls.volume);
   const [phase, setPhase] = useState<number>(home.controls.phase);
 
+  const [selectedTarget, setSelectedTarget] = useState<string | null>(storage.getSelectedTarget());
+
   const nowPlaying = useNowPlaying();
 
   // Update active preset
   useEffect(() => {
     if (nowPlaying) {
-      const { active } = storage.getPresetFromPlaying(nowPlaying);
+      const { active } = storage.getPresetFromPlaying(nowPlaying, selectedTarget);
       setActivePreset(active);
     } else {
       setActivePreset(null);
     }
-  }, [nowPlaying]);
+  }, [nowPlaying, selectedTarget]);
 
   const handleSavePreset = (type: 'TRACK' | 'ARTIST' | 'RELEASE') => {
     if (!nowPlaying) return;
@@ -45,49 +46,74 @@ export const App = () => {
       controls: currentControls
     });
     // Force refresh active preset
-    const { active } = storage.getPresetFromPlaying(nowPlaying);
+    const { active } = storage.getPresetFromPlaying(nowPlaying, selectedTarget);
     setActivePreset(active);
   }
 
+  useEffect(() => {
+    const query = window.matchMedia('(prefers-color-scheme: dark)');
+    const applyTheme = (e: { matches: boolean }) => {
+      document.documentElement.classList.toggle('dark', e.matches);
+    };
+    applyTheme(query); // Initial
+    query.addEventListener('change', applyTheme);
+    return () => query.removeEventListener('change', applyTheme);
+  }, []);
+
+  const handleClearPreset = () => {
+    if (nowPlaying) {
+      if (confirm(`Clear the preset?`)) {
+        storage.deletePresetsFromPlaying(nowPlaying);
+        setActivePreset(storage.getPresetFromPlaying(nowPlaying, selectedTarget).active);
+      }
+    }
+  };
+
+  const handleSelectTarget = (target: string | null) => {
+    storage.setSelectedTarget(target);
+    setSelectedTarget(target);
+  };
+
   return (
-    <div className="app" style={{ display: 'flex', height: '100vh', width: '100vw', overflow: 'hidden' }}>
+    <div className="flex w-full h-full overflow-hidden bg-background text-primary">
       {/* Sidebar */}
-      <div style={{ width: '300px', background: '#222', borderRight: '1px solid #444', display: 'flex', flexDirection: 'column' }}>
+      <div className="sidebar">
         <LoadablePresetManager
           currentControls={{ volume, phase }}
           onLoad={(controls) => {
             setVolume(controls.volume);
             setPhase(controls.phase);
           }}
+          selectedTarget={selectedTarget}
+          onSelectTarget={handleSelectTarget}
         />
       </div>
 
       {/* Main Content */}
-      <div style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column', padding: 20, gap: 20 }}>
+      <div className="main-content h-full flex flex-col p-5 overflow-y-auto">
         <NowPlaying
           nowPlaying={nowPlaying}
           activePreset={activePreset}
-        />
-        <PresetManager
-          nowPlaying={nowPlaying}
-          activePreset={activePreset}
-          handleSetActivePreset={setActivePreset}
           onSavePreset={handleSavePreset}
+          onClearPreset={handleClearPreset}
         />
-        {!connected ? (
-          <Connect handleConnect={handleConnect} />
-        ) : (
-          <>
-            <Controls
-              connection={connected}
-              volume={volume}
-              setVolume={setVolume}
-              phase={phase}
-              setPhase={setPhase}
-              activePreset={activePreset}
-            />
-          </>
-        )}
+
+        <div className="mt-auto pt-5">
+          {!connected ? (
+            <Connect handleConnect={handleConnect} />
+          ) : (
+            <div className="card">
+              <Controls
+                connection={!!connected}
+                volume={volume}
+                setVolume={setVolume}
+                phase={phase}
+                setPhase={setPhase}
+                activePreset={activePreset}
+              />
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

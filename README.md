@@ -41,3 +41,11 @@ Build the application for production:
 ```bash
 bun run electron:build
 ```
+
+## Roadmap
+
+As we move towards a stable 1.0 release, we plan to simplify the installation process significantly:
+
+-   **One-Line Installation**: Install the app instantly via a simple `curl` command.
+-   **Direct Downloads**: Pre-built binaries (`.dmg`, `.exe`) will be available directly from the repository releases, removing the need to build from source.
+-   **Auto-Updates**: Seamless updates for installed applications.

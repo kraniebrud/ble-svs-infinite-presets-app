@@ -2,6 +2,7 @@ import "./index.css";
 
 // import { connect, delay } from "./svs/controller";
 import type { Connected } from "./svs/controller";
+import { setVolume as setDeviceVolume, setPhase as setDevicePhase } from "./svs/controller";
 import * as storage from "./svs/storage";
 
 import { useEffect, useState } from "react";
@@ -27,11 +28,37 @@ export const App = () => {
 
   const nowPlaying = useNowPlaying();
 
+  const handleSetVolume = (v: number) => {
+    setVolume(v);
+    if (connected) {
+      setDeviceVolume(v);
+    }
+  };
+
+  const handleSetPhase = (v: number) => {
+    setPhase(v);
+    if (connected) {
+      setDevicePhase(v);
+    }
+  };
+
   // Update active preset
   useEffect(() => {
     if (nowPlaying) {
       const { active } = storage.getPresetFromPlaying(nowPlaying, selectedTarget);
       setActivePreset(active);
+
+      // If we found an active preset, should we auto-apply it?
+      // For now, let's just show it.
+      // But if we wanted to applied it:
+      /*
+      if (active && connected) {
+           setDeviceVolume(active.controls.volume);
+           setDevicePhase(active.controls.phase);
+           setVolume(active.controls.volume);
+           setPhase(active.controls.phase);
+      }
+      */
     } else {
       setActivePreset(null);
     }
@@ -81,8 +108,8 @@ export const App = () => {
         <LoadablePresetManager
           currentControls={{ volume, phase }}
           onLoad={(controls) => {
-            setVolume(controls.volume);
-            setPhase(controls.phase);
+            handleSetVolume(controls.volume);
+            handleSetPhase(controls.phase);
           }}
           selectedTarget={selectedTarget}
           onSelectTarget={handleSelectTarget}
@@ -106,9 +133,9 @@ export const App = () => {
               <Controls
                 connection={!!connected}
                 volume={volume}
-                setVolume={setVolume}
+                setVolume={handleSetVolume}
                 phase={phase}
-                setPhase={setPhase}
+                setPhase={handleSetPhase}
                 activePreset={activePreset}
               />
             </div>

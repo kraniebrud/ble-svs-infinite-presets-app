@@ -14,19 +14,21 @@ export const useNowPlaying = () => {
     const [nowPlaying, setNowPlaying] = useState<NowPlayingData | null>(null);
 
     useEffect(() => {
-        const electron = (window as any).electron;
+        let unlisten: (() => void) | undefined;
 
-        if (electron && electron.onNowPlayingUpdate) {
-            electron.onNowPlayingUpdate((data: NowPlayingData) => {
-                if (data && typeof data === 'object') {
-                    setNowPlaying((prev) => {
-                        return data;
-                    });
-                }
+        import('@tauri-apps/api/event').then(({ listen }) => {
+            listen<NowPlayingData>('now-playing-update', (event) => {
+                setNowPlaying(event.payload);
+            }).then((u) => {
+                unlisten = u;
             });
-        }
+        });
 
-        return () => { };
+        return () => {
+            if (unlisten) {
+                unlisten();
+            }
+        };
     }, []);
 
     return nowPlaying;

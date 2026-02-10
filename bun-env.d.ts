@@ -3,10 +3,6 @@
 
 declare global {
   interface Window {
-    electron: {
-      getNowPlaying: () => Promise<any>;
-      onNowPlayingUpdate: (callback: (data: any) => void) => void;
-    };
   }
 }
 
